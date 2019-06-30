@@ -15,6 +15,9 @@
         Remote host: http://yourserver.com:8080
     
     Logs go to log/express.log
+
+    Author: Paul Ybarra
+    Date: June 30, 2019
 */
 
 var express = require("express");
