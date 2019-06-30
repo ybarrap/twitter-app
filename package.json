@@ -1,0 +1,21 @@
+{
+  "name": "twitter-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.4",
+    "express": "^4.17.1",
+    "express-logger": "0.0.3",
+    "express-session": "^1.16.2",
+    "oauth": "^0.9.15",
+    "twitter": "^1.7.1",
+    "util-inspect": "^0.1.8"
+  }
+}
