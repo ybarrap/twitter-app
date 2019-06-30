@@ -2,8 +2,7 @@
     Node.js, express, oauth example using Twitters API
     
     Install Dependencies:
-        npm install express
-        npm install oauth
+        npm install express body-parser oauth express-logger cookie-parser express-session util-inspect oauth
     
     Create App File:
         Save this file to app.js
@@ -15,6 +14,7 @@
         Local host: http://127.0.0.1:8080
         Remote host: http://yourserver.com:8080
     
+    Logs go to log/express.log
 */
 
 var express = require("express");
@@ -24,7 +24,6 @@ var cookieParser = require("cookie-parser");
 var session = require("express-session");
 var inspect = require("util-inspect");
 var oauth = require("oauth");
-var Twitter = require("twitter");
 
 var app = express();
 
