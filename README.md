@@ -29,4 +29,8 @@ https://developer.twitter.com/en/apps
 https://developer.twitter.com/en/docs/basics/authentication/overview/3-legged-oauth.html
 https://support.gnip.com/apis/oauth.html
 
+Code baseline:
+
+Started with code found at https://gist.github.com/joshj/1933640.
+
 
