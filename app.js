@@ -27,6 +27,7 @@ var cookieParser = require("cookie-parser");
 var session = require("express-session");
 var inspect = require("util-inspect");
 var oauth = require("oauth");
+var querystring = require("querystring");
 
 var app = express();
 
@@ -202,9 +203,20 @@ app.get("/home/user", function(req, res) {
 
 // https://api.twitter.com/1.1/search/tweets.json
 
+//https://api.twitter.com/1.1/search/tweets.json?count=${count}${since_id}${max_id}${query}${result_type}
+
+//https://api.twitter.com/1.1/search/tweets.json?count=10&q=from%3Aybarrap
+
 app.get("/home/search", function(req, res) {
+  //   console.log(
+  //     "******* res.query.q = ",
+  //     querystring.stringify({ q: req.query.q || "from:ybarrap" })
+  //   );
+  const query =
+    "&" + querystring.stringify({ q: req.query.q || "from:ybarrap" });
+  console.log(query);
+  const result_type = "&result_type=" + (req.query.result_type || "mixed");
   const count = req.query.count || 3;
-  const screen_name = req.query.screen_name || "ybarrap";
   var since_id = "";
   var max_id = "";
   if (req.query.max_id) {
@@ -214,8 +226,11 @@ app.get("/home/search", function(req, res) {
     since_id = "&since_id=" + req.query.since_id;
     max_id = "";
   }
+  console.log(
+    `https://api.twitter.com/1.1/search/tweets.json?count=${count}${max_id}${since_id}${result_type}${query}`
+  );
   consumer.get(
-    `https://api.twitter.com/1.1/search/tweets.json?count=${count}&screen_name=${screen_name}${since_id}${max_id}`,
+    `https://api.twitter.com/1.1/search/tweets.json?count=${count}${max_id}${result_type}${since_id}${query}`,
     req.session.oauthAccessToken,
     req.session.oauthAccessTokenSecret,
     function(error, data, response1) {
@@ -223,17 +238,18 @@ app.get("/home/search", function(req, res) {
         //console.log(error)
         res.redirect("/sessions/connect");
       } else {
-        var tweets = JSON.parse(data);
+        var { statuses } = JSON.parse(data);
         // res.send("You are signed in: " + inspect(parsedData));
-        res.send(parseTweet(tweets));
+        res.send(parseTweet(statuses));
         // res.send(inspect(tweets[0]));
         //   console.log(parsedData[i].text);
-        for (var i = 0, len = tweets.length; i < len; i++) {
+        // console.log(tweets.statuses);
+        for (var i = 0, len = statuses.length; i < len; i++) {
           console.log(
             `Screen Name: ${
-              tweets[i].user.screen_name
-            } Date: ${parseTwitterDate(tweets[i].created_at)} Tweet: ${
-              tweets[i].text
+              statuses[i].user.screen_name
+            } Date: ${parseTwitterDate(statuses[i].created_at)} Tweet: ${
+              statuses[i].text
             }`
           );
         }
