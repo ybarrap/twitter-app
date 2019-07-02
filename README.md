@@ -21,6 +21,10 @@ Get your own timeline:
 
 http://192.168.1.4:8080/home/timeline?count=10&since_id=1145438457491349506
 
+Get Tweets where you are mentioned:
+
+http://192.168.1.4:8080/home/mentions?count=20
+
 Resources:
 
 https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets
