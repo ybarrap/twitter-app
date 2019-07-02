@@ -225,7 +225,7 @@ app.get("/home/mentions", function(req, res) {
       } else {
         var tweets = JSON.parse(data);
         // res.send("You are signed in: " + inspect(parsedData));
-        res.send(parseMentions(tweets));
+        res.send(parseTweet(tweets));
         // res.send(inspect(tweets[0]));
         //   console.log(parsedData[i].text);
         for (var i = 0, len = tweets.length; i < len; i++) {
@@ -333,17 +333,6 @@ function parseTweet(tweets) {
       tweets[i].id_str
     } Date: ${parseTwitterDate(tweets[i].created_at)} Tweet: ${
       tweets[i].text
-    }</li>`;
-  }
-  return d;
-}
-
-function parseMentions(tweets) {
-  var d = "";
-  for (var i = 0, len = tweets.length; i < len; i++) {
-    d += `<li>${parseTwitterDate(tweets[i].created_at)} Since_id: ${
-      tweets[i].id_str
-    } Tweet: ${tweets[i].text}    
     }</li>`;
   }
   return d;
