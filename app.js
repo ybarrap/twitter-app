@@ -201,11 +201,54 @@ app.get("/home/user", function(req, res) {
   );
 });
 
+// https://api.twitter.com/1.1/statuses/mentions_timeline.json
+
+app.get("/home/mentions", function(req, res) {
+  const count = req.query.count || 3;
+  var since_id = "";
+  var max_id = "";
+  if (req.query.max_id) {
+    max_id = "&max_id=" + req.query.max_id;
+    since_id = "";
+  } else if (req.query.since_id) {
+    since_id = "&since_id=" + req.query.since_id;
+    max_id = "";
+  }
+  consumer.get(
+    `https://api.twitter.com/1.1/statuses/mentions_timeline.json?count=${count}${since_id}${max_id}`,
+    req.session.oauthAccessToken,
+    req.session.oauthAccessTokenSecret,
+    function(error, data, response1) {
+      if (error) {
+        //console.log(error)
+        res.redirect("/sessions/connect");
+      } else {
+        var tweets = JSON.parse(data);
+        // res.send("You are signed in: " + inspect(parsedData));
+        res.send(parseMentions(tweets));
+        // res.send(inspect(tweets[0]));
+        //   console.log(parsedData[i].text);
+        for (var i = 0, len = tweets.length; i < len; i++) {
+          console.log(
+            `Date: ${parseTwitterDate(tweets[i].created_at)} Tweet: ${
+              tweets[i].text
+            }`
+          );
+        }
+      }
+    }
+  );
+});
+
 // https://api.twitter.com/1.1/search/tweets.json
 
 //https://api.twitter.com/1.1/search/tweets.json?count=${count}${since_id}${max_id}${query}${result_type}
 
 //https://api.twitter.com/1.1/search/tweets.json?count=10&q=from%3Aybarrap
+
+// https://api.twitter.com/1.1/search/tweets.json?count=10&q=from%3Aybarrap?q=castro%20near%3A"San%20Antonio%2C%20TX"%20within%3A15mi&src=typd&lang=en
+
+// https://api.twitter.com/1.1/search/tweets.json?count=${count}${max_id}${result_type}${since_id}${query}
 
 app.get("/home/search", function(req, res) {
   //   console.log(
@@ -290,6 +333,17 @@ function parseTweet(tweets) {
       tweets[i].id_str
     } Date: ${parseTwitterDate(tweets[i].created_at)} Tweet: ${
       tweets[i].text
+    }</li>`;
+  }
+  return d;
+}
+
+function parseMentions(tweets) {
+  var d = "";
+  for (var i = 0, len = tweets.length; i < len; i++) {
+    d += `<li>${parseTwitterDate(tweets[i].created_at)} Since_id: ${
+      tweets[i].id_str
+    } Tweet: ${tweets[i].text}    
     }</li>`;
   }
   return d;
